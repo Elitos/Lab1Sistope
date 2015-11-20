@@ -14,7 +14,7 @@ int main(int argc, char *argv[]){
 	pipe(pipe1);
 	pipe(pipe2);
   char * c = (char*)malloc(sizeof(char)*100); 
-  char str[100];
+  char str[]
 
     int status = 0; 
     pid_t wpid;
