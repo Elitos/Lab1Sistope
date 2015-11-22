@@ -15,40 +15,55 @@
 int main(int argc, char *argv[]){
 
 	int pipe1[2];
-	pipe(pipe1);
-
-  char * c = (char*)malloc(sizeof(char)*100); 
+  char * c ;
   char str[100];
 
     
-	printf("Escritura: %d, Lectura: %d\n",pipe1[LEER],pipe1[ESCRIBIR]);
+
     
   pid_t pid;
   time_t t;
   int status;
 
+int k;
 
-  if ((pid = fork()) < 0)
-    perror("fork() error");
-  else if (pid == 0) {
-    execv("./otro", (char *[]){ "./otro", argv[1], NULL });;
-    perror("execv() error");
-    _exit(1);
-  }
-  else do {
-    if ((pid = waitpid(pid, &status, WNOHANG)) == -1)
-      perror("wait() error");
-    else if (pid == 0) {
-      time(&t);
-      printf("child is still running at %s", ctime(&t));
-      sleep(1);
+  for(k = 0; k <= 1; k++){
+      pipe(pipe1);
+      printf("Escritura: %d, Lectura: %d\n",pipe1[LEER],pipe1[ESCRIBIR]);
+      if ((pid = fork()) < 0)
+        perror("fork() error");
+      else if (pid == 0) {
+        close(LEER);
+        close(ESCRIBIR);
+        dup2(pipe1[ESCRIBIR],STDOUT_FILENO);
+        close(pipe1[ESCRIBIR]);
+        close(pipe1[LEER]);
+        execv("./otro", (char *[]){ "./otro", argv[k], NULL });;
+        perror("execv() error");
+        _exit(1);
+      }
+      else do {
+        if ((pid = waitpid(pid, &status, WNOHANG)) == -1)
+          perror("wait() error");
+        else if (pid == 0) {
+          time(&t);
+          printf("child is still running at %s", ctime(&t));
+          sleep(1);
+        }
+        else {
+          if (WIFEXITED(status)){ // Para padre termina proceso hijo
+            printf("child exited with status of %d\n", WEXITSTATUS(status));
+            c = (char*)malloc(sizeof(char)*100); 
+            close(pipe1[ESCRIBIR]);
+            int nread = read(pipe1[LEER], c, 100); 
+            c[nread] = '\0';
+            printf("%s", c);
+            close(pipe1[LEER]);
+          }
+          else puts("child did not exit successfully");
+        }
+      } while (pid == 0);
     }
-    else {
-      if (WIFEXITED(status))
-        printf("child exited with status of %d\n", WEXITSTATUS(status));
-      else puts("child did not exit successfully");
-    }
-  } while (pid == 0);
-      
+
    return 0;
 }
