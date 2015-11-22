@@ -10,7 +10,7 @@ Header donde se declaran las funciones a utilizar por el proceso principal (padr
 includes a las librerias necesarias.
 */
 
-#include <functionsfather.h>
+#include "functionsfather.h"
 
 #define OK       0
 #define NO_INPUT 1
@@ -19,7 +19,7 @@ includes a las librerias necesarias.
 #define ESCRIBIR 1
 
 
-int main(int argc, char *argv[]){
+int main(int argc, char*argv[]){
 
 	int pipe1[2];
   char * c ;
@@ -42,7 +42,7 @@ while(strcmp(comando,"exit") != 0){
         dup2(pipe1[ESCRIBIR],STDOUT_FILENO);
         close(pipe1[ESCRIBIR]);
         close(pipe1[LEER]);
-        execv("./otro", (char *[]){ "./otro", comando, NULL });;
+        execv("./child", (char *[]){ "./child", comando, NULL });;
         perror("execv() error");
         _exit(1);
       }
