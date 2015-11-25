@@ -35,3 +35,8 @@ int getLine (char *prmpt, char *buff, size_t sz) {
     buff[strlen(buff)-1] = '\0';
     return OK;
 }
+
+int iscomandofhater(char *comando){
+   
+
+}
