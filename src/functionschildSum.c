@@ -6,8 +6,12 @@
 #define LEER 0
 #define ESCRIBIR 1
 
-int main (int argc, char *argv[]) { 
+#include "functions.h"
 
+int main (int argc, char *argv[]) { 
+ 
+ Matrix A,B;
+ 
  char *nombre = "Elias";
  int valor = rand() % 100 + 1; 
  printf("%s %s", nombre,argv[1]);

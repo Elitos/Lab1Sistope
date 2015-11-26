@@ -188,7 +188,7 @@ int main(int argc, char * argv[]){
 		}
         
         char *s[5]; 
-		int nargs = getComando(comando, s);
+		    int nargs = getComando(comando, s);
         printf("%d\n", nargs);
         int valido = isComandoP_O_H(s,nargs);
         printf("%s , valido : %d, funcion : %d\n", s[2], valido, getFuncion(s,nargs));

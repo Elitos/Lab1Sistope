@@ -8,9 +8,9 @@
 
 int main (int argc, char *argv[]) { 
 
- char *nombre = "Elias";
- int valor = rand() % 100 + 1; 
- printf("%s %s", nombre,argv[1]);
- printf("\n");
+ int i = 1000000001;
+ printf("%d\n", i);
+ i = 10000000002;
+ printf("%d\n",i);
  return 0;
 }
