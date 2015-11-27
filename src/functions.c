@@ -111,6 +111,17 @@ int isComandoP_O_H(char *array[], int nargs){ // Padre 1 , Hijo 2 , error -1
                 }
             }
         }
+        if(strlen(array[0])==1 && array[0][0] >= 65 && array[0][0] <= 90){ // tengo el A
+            if(strlen(array[1])==1 && array[1][0] == '='){
+                if(strlen(array[2])==1 && array[2][0] >= 65 && array[0][0] <= 90){ // reconosco A = A
+                   if((strlen(array[3]) == 1) && (array[3][0] == '*')){ //reconosco A = A *
+                       // reconosco A = A * A
+                        return 2;
+                      
+                   }
+                }
+            }
+        }
     }
 
     if(nargs == 4){
@@ -159,7 +170,8 @@ int getFuncion(char *array[], int nargs){
             return 7;
          }
          if(array[3][0] == '*'){
-            if(atoi(array[4]) != 0){
+            int val = atoi(array[4]);
+            if(val != 0 || array[4][0] == '0'){
                 return 8;
             }else{
                 return 9;

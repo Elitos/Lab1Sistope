@@ -104,18 +104,18 @@ void rSuma(char *s[], int nargs, Matrix *arrMatrix[],int PARENT_WRITE_DES, int P
             if(s[4][0] == arrMatrix[j]->name){ //= A + 'B'    
               int tamA = tam_matriz_string(*arrMatrix[i]);
               int tamB = tam_matriz_string(*arrMatrix[j]);    
-              char *c = (char*)malloc(sizeof(char)*(tamA+tamB)); 
-              char *p = (char*)malloc(sizeof(char)*(tamA+tamB)); 
+              char *c = (char*)malloc(sizeof(char)*(tamA+tamB)*10); 
+              char *p = (char*)malloc(sizeof(char)*(tamA+tamB)*10); 
               p = MatrizToS2(*arrMatrix[i],*arrMatrix[j]);
-              //printf("%s\n",  p);
-              write(PARENT_WRITE_DES, p , sizeof(tamA)*10); 
-              int nread = read(PARENT_READ_DES, c, tamA+tamB);
-              //printf("PADRE: \n%s\n",c);
-              //printf("AQUI %d\n",nread);
+              write(PARENT_WRITE_DES, p , (tamB+tamA)*10); 
+              int nread = read(PARENT_READ_DES, c, (tamB+tamA)*10);
+              free(p);
+              //printf("PADRE: \n%s\n",c);//printf("AQUI %d\n",nread);//printf("%s\n",  p);
               if(nread>4){
               for(k = 0; k<26; k++){
                   if(s[0][0] == arrMatrix[k]->name){
                     SToMatriz(c,arrMatrix[k]);
+                    free(c);
                   }
               }
               }else{
@@ -129,6 +129,189 @@ void rSuma(char *s[], int nargs, Matrix *arrMatrix[],int PARENT_WRITE_DES, int P
   }
 }
 
+void resta(char *s[], int nargs, Matrix *arrMatrix[]){
+  int i; int j;
+  for(i = 0; i<26; i++){
+     if(s[2][0] == arrMatrix[i]->name){ //= 'A'
+        for(j = 0; j<26; j++){
+            if(s[4][0] == arrMatrix[j]->name){ //= A + 'B'
+              char tamA[10];
+              char tamB[10];
+              sprintf(tamA, "%d", tam_matriz_string(*arrMatrix[i]));
+              sprintf(tamB, "%d", tam_matriz_string(*arrMatrix[j]));
+              execv("./childRes", (char *[]){ "./childRes",  tamA , tamB, NULL});;
+              perror("execv() error");             
+              break;
+            }
+        }
+        break;
+     }
+  }
+}
+
+void rResta(char *s[], int nargs, Matrix *arrMatrix[],int PARENT_WRITE_DES, int PARENT_READ_DES){
+  int i; int j; int k;
+  for(i = 0; i<26; i++){
+     if(s[2][0] == arrMatrix[i]->name){ //= 'A'
+        for(j = 0; j<26; j++){
+            if(s[4][0] == arrMatrix[j]->name){ //= A + 'B'    
+              int tamA = tam_matriz_string(*arrMatrix[i]);
+              int tamB = tam_matriz_string(*arrMatrix[j]);    
+              char *c = (char*)malloc(sizeof(char)*(tamA+tamB)*10); 
+              char *p = (char*)malloc(sizeof(char)*(tamA+tamB)*10); 
+              p = MatrizToS2(*arrMatrix[i],*arrMatrix[j]);
+              write(PARENT_WRITE_DES, p , (tamB+tamA)*10); 
+              int nread = read(PARENT_READ_DES, c, (tamB+tamA)*10);
+              free(p);
+              //printf("PADRE: \n%s\n",c);//printf("AQUI %d\n",nread);//printf("%s\n",  p);
+              if(nread>4){
+              for(k = 0; k<26; k++){
+                  if(s[0][0] == arrMatrix[k]->name){
+                    SToMatriz(c,arrMatrix[k]);
+                    free(c);
+                  }
+              }
+              }else{
+                perror("Matrices no compatibles");
+              }      
+              break;
+            }
+        }
+        break;
+     }
+  }
+}
+
+void mulconst(char *s[], int nargs, Matrix *arrMatrix[]){
+  int i;
+  for(i = 0; i<26; i++){
+     if(s[2][0] == arrMatrix[i]->name){
+        char tamA[10];
+        sprintf(tamA, "%d", tam_matriz_string(*arrMatrix[i]));
+        execv("./childMulC", (char *[]){ "./childMulC",  tamA , s[4], NULL});;
+        perror("execv() error"); 
+        break;
+     }
+  }
+}
+
+void rMulConst(char *s[], int nargs, Matrix *arrMatrix[],int PARENT_WRITE_DES, int PARENT_READ_DES){
+  int i; int k;
+  for(i = 0; i<26; i++){
+     if(s[2][0] == arrMatrix[i]->name){ // = 'A' 
+        int tamA = tam_matriz_string(*arrMatrix[i]); 
+        char *c = (char*)malloc(sizeof(char)*(tamA)*10); 
+        char *p = (char*)malloc(sizeof(char)*(tamA)*10); 
+        p = MatrizToS(*arrMatrix[i]);
+        write(PARENT_WRITE_DES, p , (tamA)*10); 
+        int nread = read(PARENT_READ_DES, c, (tamA)*10);
+        free(p);
+        if(nread>4){
+        for(k = 0; k<26; k++){
+            if(s[0][0] == arrMatrix[k]->name){
+              SToMatriz(c,arrMatrix[k]);
+              free(c);
+            }
+        }
+        }else{
+          perror("Matrices no compatibles");
+        }      
+        break;
+     }
+  }
+}
+
+void mult(char *s[], int nargs, Matrix *arrMatrix[]){
+  int i; int j;
+  for(i = 0; i<26; i++){
+     if(s[2][0] == arrMatrix[i]->name){ //= 'A'
+        for(j = 0; j<26; j++){
+            if(s[4][0] == arrMatrix[j]->name){ //= A + 'B'
+              char tamA[10];
+              char tamB[10];
+              sprintf(tamA, "%d", tam_matriz_string(*arrMatrix[i]));
+              sprintf(tamB, "%d", tam_matriz_string(*arrMatrix[j]));
+              execv("./childMul", (char *[]){ "./childMul",  tamA , tamB, NULL});;
+              perror("execv() error");             
+              break;
+            }
+        }
+        break;
+     }
+  }
+}
+
+void rMult(char *s[], int nargs, Matrix *arrMatrix[],int PARENT_WRITE_DES, int PARENT_READ_DES){
+  int i; int j; int k;
+  for(i = 0; i<26; i++){
+     if(s[2][0] == arrMatrix[i]->name){ //= 'A'
+        for(j = 0; j<26; j++){
+            if(s[4][0] == arrMatrix[j]->name){ //= A + 'B'    
+              int tamA = tam_matriz_string(*arrMatrix[i]);
+              int tamB = tam_matriz_string(*arrMatrix[j]);    
+              char *c = (char*)malloc(sizeof(char)*(tamA+tamB)*10); 
+              char *p = (char*)malloc(sizeof(char)*(tamA+tamB)*10); 
+              p = MatrizToS2(*arrMatrix[i],*arrMatrix[j]);
+              write(PARENT_WRITE_DES, p , (tamB+tamA)*10); 
+              int nread = read(PARENT_READ_DES, c, (tamB+tamA)*10);
+              free(p);
+              //printf("PADRE: \n%s\n",c);//printf("AQUI %d\n",nread);//printf("%s\n",  p);
+              if(nread>4){
+              for(k = 0; k<26; k++){
+                  if(s[0][0] == arrMatrix[k]->name){
+                    SToMatriz(c,arrMatrix[k]);
+                    free(c);
+                  }
+              }
+              }else{
+                perror("Matrices no compatibles");
+              }      
+              break;
+            }
+        }
+        break;
+     }
+  }
+}
+
+void tran(char *s[], int nargs, Matrix *arrMatrix[]){
+  int i;
+  for(i = 0; i<26; i++){
+     if(s[3][0] == arrMatrix[i]->name){
+        char tamA[10];
+        sprintf(tamA, "%d", tam_matriz_string(*arrMatrix[i]));
+        execv("./childTran", (char *[]){ "./childTran",  tamA , NULL});;
+        perror("execv() error"); 
+        break;
+     }
+  }
+}
+
+void rtran(char *s[], int nargs, Matrix *arrMatrix[],int PARENT_WRITE_DES, int PARENT_READ_DES){
+  int i; int k;
+  for(i = 0; i<26; i++){
+     if(s[3][0] == arrMatrix[i]->name){
+        int tamA = tam_matriz_string(*arrMatrix[i]); 
+        char *c = (char*)malloc(sizeof(char)*(tamA)*10); 
+        char *p = (char*)malloc(sizeof(char)*(tamA)*10); 
+        p = MatrizToS(*arrMatrix[i]);
+        write(PARENT_WRITE_DES, p , (tamA)*10); 
+        int nread = read(PARENT_READ_DES, c, (tamA)*10);
+        free(p);
+        if(nread>4){
+        for(k = 0; k<26; k++){
+            if(s[0][0] == arrMatrix[k]->name){
+              SToMatriz(c,arrMatrix[k]);
+              free(c);
+            }
+        }
+        }else{
+          perror("Matrices no compatibles");
+        }      
+        break;
+     }
+  }
+}
 
 int main(int argc, char*argv[]){
   
@@ -194,18 +377,17 @@ int main(int argc, char*argv[]){
              suma(s,nargs,arrMatrix);
           }
           if(op == 7){ // -
-            
+             resta(s,nargs,arrMatrix); 
           }
           if(op == 8){ // * B
-            
+             mulconst(s,nargs,arrMatrix);
            }
           if(op == 9){ // * b
-            
+             mult(s,nargs,arrMatrix);
           }
           if(op == 10){ // trans
-            
+             tran(s,nargs,arrMatrix);
           }
-
         //char tam[20];
         //sprintf(tam, "%d", tam_matriz_string(A));
         //execv("./childSum", (char *[]){ "./childSum", s[0], s[1], s[2], s[3] , s[4], tam, NULL});;
@@ -222,16 +404,16 @@ int main(int argc, char*argv[]){
              rSuma(s,nargs,arrMatrix,writepipe[1], readpipe[0]); 
           }
           if(op == 7){ // -
-            
+             rResta(s,nargs,arrMatrix,writepipe[1], readpipe[0]);
           }
           if(op == 8){ // * B
-            
-           }
+             rMulConst(s,nargs,arrMatrix,writepipe[1], readpipe[0]);   
+          }
           if(op == 9){ // * b
-            
+             rMult(s,nargs,arrMatrix,writepipe[1], readpipe[0]);
           }
           if(op == 10){ // trans
-            
+             rtran(s,nargs,arrMatrix,writepipe[1], readpipe[0]);
           }        
          //char *c = (char*)malloc(sizeof(char)*); 
          //printf("AQUI\n");

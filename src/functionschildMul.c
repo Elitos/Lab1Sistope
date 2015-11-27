@@ -2,7 +2,8 @@
 
 int main (int argc, char *argv[]) { 
  
- Matrix A, B, C; 
+ Matrix A, B, C;
+ C.n = 0; 
  // argv[1] = tamA y argv[2] = TamB
  int tamBuffer = atoi(argv[1])+atoi(argv[2])+2;
 
@@ -20,10 +21,7 @@ int main (int argc, char *argv[]) {
  SToMatriz(pA,&A);
  SToMatriz(pB,&B);
 
- ASumBToC(A,B,&C);
-    
-char sizeA[10];
-sprintf(sizeA, "%d", nread);
+ AmulBToC(A,B,&C);
  
 if(C.n != 0){
   write(STDOUT_FILENO,MatrizToS(C),tamBuffer);
@@ -32,4 +30,3 @@ if(C.n != 0){
 }
  return 0;
 }
-

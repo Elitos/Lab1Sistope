@@ -20,7 +20,7 @@ int main (int argc, char *argv[]) {
  SToMatriz(pA,&A);
  SToMatriz(pB,&B);
 
- ASumBToC(A,B,&C);
+ AResBToC(A,B,&C);
     
 char sizeA[10];
 sprintf(sizeA, "%d", nread);
@@ -32,4 +32,3 @@ if(C.n != 0){
 }
  return 0;
 }
-
