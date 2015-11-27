@@ -27,6 +27,12 @@ includes a las librerias necesarias.
 #define LEER 0
 #define ESCRIBIR 1
 
+#define PARENT_READ readpipe[0]
+#define CHILD_WRITE readpipe[1]
+#define CHILD_READ  writepipe[0]
+#define PARENT_WRITE  writepipe[1]
+
+
 static int getLine (char *prmpt, char *buff, size_t sz) {
     int ch, extra;
 
@@ -54,7 +60,8 @@ static int getLine (char *prmpt, char *buff, size_t sz) {
 
 int main(int argc, char *argv[]){
 
-	int pipe1[2];
+	int readpipe[2];
+  int writepipe[2];
   char * c ;
   char str[100];
     
@@ -64,42 +71,50 @@ int main(int argc, char *argv[]){
 
 char comando[10] = "Co!";
 int comando_lengh = 0; 
+
+while(getLine("",comando,sizeof(comando)) == NO_INPUT){}
+
 while(strcmp(comando,"exit") != 0){
-      pipe(pipe1);
-      printf("Escritura: %d, Lectura: %d\n",pipe1[LEER],pipe1[ESCRIBIR]);
-      if ((pid = fork()) < 0)
+
+      pipe(readpipe);
+      pipe(writepipe);
+
+      printf("Read Escritura: %d, Lectura: %d\n",readpipe[LEER],readpipe[ESCRIBIR]);
+      printf("Read Escritura: %d, Lectura: %d\n",writepipe[LEER],writepipe[ESCRIBIR]);
+
+      if ((pid = fork()) < 0){
         perror("fork() error");
-      else if (pid == 0) {
-        close(LEER);
-        close(ESCRIBIR);
-        dup2(pipe1[ESCRIBIR],STDOUT_FILENO);
-        close(pipe1[ESCRIBIR]);
-        close(pipe1[LEER]);
+      }else if (pid == 0) { // SOY HIJO
+
+
+        close(PARENT_WRITE);
+        close(PARENT_READ);
+
+        dup2(CHILD_READ,  0);  close(CHILD_READ);
+        dup2(CHILD_WRITE, 1);  close(CHILD_WRITE);
+        
+
         execv("./otro", (char *[]){ "./otro", comando, NULL });;
         perror("execv() error");
-        _exit(1);
+        exit(1);
+      }else { // Soy padre
+         
+         char *c = (char*)malloc(sizeof(char)*100); 
+         char buff[5]; 
+
+         close(CHILD_READ);
+         close(CHILD_WRITE);
+         
+         //printf("AQUI\n");
+         write(PARENT_WRITE, "test", 4); 
+
+         read(PARENT_READ, buff, 4);
+         buff[4] = '\0';
+         printf("%s\n",buff);
+
+         close(PARENT_READ);
+         close(PARENT_WRITE); 
       }
-      else do {
-        if ((pid = waitpid(pid, &status, WNOHANG)) == -1)
-          perror("wait() error");
-        else if (pid == 0) {
-          time(&t);
-          printf("child is still running at %s", ctime(&t));
-          sleep(1);
-        }
-        else {
-          if (WIFEXITED(status)){ // Para padre termina proceso hijo
-            printf("child exited with status of %d\n", WEXITSTATUS(status));
-            c = (char*)malloc(sizeof(char)*100); 
-            close(pipe1[ESCRIBIR]);
-            int nread = read(pipe1[LEER], c, 100); 
-            c[nread] = '\0';
-            printf("%s", c);
-            close(pipe1[LEER]);
-          }
-          else puts("child did not exit successfully");
-        }
-      } while (pid == 0);
  
    while(getLine("",comando,sizeof(comando)) == NO_INPUT){}
     // gets(comando);
@@ -108,3 +123,4 @@ while(strcmp(comando,"exit") != 0){
 
    return 0;
 }
+

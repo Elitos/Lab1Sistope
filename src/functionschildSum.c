@@ -1,20 +1,38 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <unistd.h>
-
-#define LEER 0
-#define ESCRIBIR 1
-
 #include "functions.h"
 
 int main (int argc, char *argv[]) { 
  
- Matrix A,B;
+ Matrix A, B, C; 
+ // argv[1] = tamA y argv[2] = TamB
+ int tamBuffer = atoi(argv[1])+atoi(argv[2])+2;
+
+ char buff[tamBuffer];
+
+ int nread = read(STDIN_FILENO,buff,tamBuffer);
  
- char *nombre = "Elias";
- int valor = rand() % 100 + 1; 
- printf("%s %s", nombre,argv[1]);
- printf("\n");
+ char *buffer = buff;
+ int tamA = atoi(argv[1]);
+ int tamB = atoi(argv[2]);
+
+ char  *pA = strtok(buffer,",");
+ char  *pB = strtok(NULL,",");
+
+ SToMatriz(pA,&A);
+ SToMatriz(pB,&B);
+
+ASumBToC(A,B,&C);
+    
+//char *c = (char*)malloc(sizeof(char)*(tamA+tamB)); 
+//MatrizToS(C);
+
+char sizeA[10];
+sprintf(sizeA, "%d", nread);
+ 
+if(C.n != 0){
+  write(STDOUT_FILENO,MatrizToS(C),tamBuffer);
+}else{ 
+  write(STDOUT_FILENO,"!",2);
+}
  return 0;
 }
+

@@ -364,7 +364,7 @@ void ASumBToC(Matrix A, Matrix B, Matrix *C){
          }
      }
    }else{
-     printf("Matrices no validas\n");
+     //printf("Matrices no validas\n");
    }
 }
 
@@ -481,7 +481,7 @@ char *MatrizToS2(Matrix A, Matrix B){
       sizetA = strlen(MatrizToS(A));
       sizetB = strlen(MatrizToS(B));
       char *buffer2ble = (char *)malloc(sizeof(char)*(sizetA+sizetB+1));
-      perror("Error Matriz muy Grande");
+      //perror("Error Matriz muy Grande");
       strcpy(buffer2ble,"");
       strcat(buffer2ble,MatrizToS(A));
       strcat(buffer2ble,",");
@@ -497,10 +497,10 @@ void SToMatriz(char *buffer, Matrix *A){
 
     p = strtok(buffer,"\n");
     int n = atoi(p);
-    printf("%d\n",n);
+    //printf("%d\n",n);
     p = strtok(NULL,"\n");
     int m = atoi(p);
-    printf("%d\n",m);
+    //printf("%d\n",m);
 
     //printf("%d,%d\n",n,m); 
     
@@ -545,12 +545,12 @@ void AmulBToC(Matrix A, Matrix B, Matrix *C){
 
   int n = A.n;
   int m = B.m;
-  printf("%d,%d\n",n,m);
-  printf("A.n%d,A.m%d\n", A.n, A.m);
-  printf("B.n%d,B.m%d\n", B.n, B.m);
+  //printf("%d,%d\n",n,m);
+  //printf("A.n%d,A.m%d\n", A.n, A.m);
+  //printf("B.n%d,B.m%d\n", B.n, B.m);
 
   if(A.m != B.n){
-    printf("Error matrices no compatibles M1(nxm) y M2(mxp)\n");
+    perror("Error matrices no compatibles M1(nxm) y M2(mxp)\n");
     exit(1);
   }
 
