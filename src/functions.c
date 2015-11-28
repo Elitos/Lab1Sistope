@@ -171,8 +171,16 @@ int getFuncion(char *array[], int nargs){
          }
          if(array[3][0] == '*'){
             int val = atoi(array[4]);
-            if(val != 0 || array[4][0] == '0'){
+            char *num = array[4]; 
+            if(val != 0 || array[4][0] == '0' || array[4][0] == '-' ){
+             int len = strlen(array[4]);
+             if( len >= 2){
+              if((array[4][0] == '-' && atoi(num++) != 0) || (array[4][0] == '-' && array[4][1] == '0')){
                 return 8;
+              }
+             }else{
+                return 8;
+             }
             }else{
                 return 9;
             }

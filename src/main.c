@@ -205,6 +205,7 @@ void rMulConst(char *s[], int nargs, Matrix *arrMatrix[],int PARENT_WRITE_DES, i
         p = MatrizToS(*arrMatrix[i]);
         write(PARENT_WRITE_DES, p , (tamA)*10); 
         int nread = read(PARENT_READ_DES, c, (tamA)*10);
+        //printf("Padre: %s\n", c);
         free(p);
         if(nread>4){
         for(k = 0; k<26; k++){

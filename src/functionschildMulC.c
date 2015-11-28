@@ -12,7 +12,9 @@ int main (int argc, char *argv[]) {
  
  char *buffer = buff;
  int tamA = atoi(argv[1]);
+
  int b = atoi(argv[2]);
+
 
  char  *pA = strtok(buffer,",");
 
@@ -21,7 +23,7 @@ int main (int argc, char *argv[]) {
  AmulbToB(A,b,&B);
     
 char sizeA[10];
-sprintf(sizeA, "%d", nread);
+sprintf(sizeA, "%d", b);
  
 if(B.n != 0){
   write(STDOUT_FILENO,MatrizToS(B),tamBuffer);
