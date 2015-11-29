@@ -10,25 +10,27 @@ int main (int argc, char *argv[]) {
 
  int nread = read(STDIN_FILENO,buff,tamBuffer);
  
- char *buffer = buff;
+ char *buffer = (char *)malloc(sizeof(char)*tamBuffer);
+ strcpy(buffer,buff);
  int tamA = atoi(argv[1]);
 
  int b = atoi(argv[2]);
 
 
- char  *pA = strtok(buffer,",");
+ //char  *pA = strtok(buffer,"");
 
- SToMatriz(pA,&A);
+ SToMatriz(buffer,&A);
 
- AmulbToB(A,b,&B);
+ AmulbcToB(A,b,&B);
     
-char sizeA[10];
-sprintf(sizeA, "%d", b);
+ char sizeA[10];
+ sprintf(sizeA, "%d", b);
  
 if(B.n != 0){
-  write(STDOUT_FILENO,MatrizToS(B),tamBuffer);
+  write(STDOUT_FILENO,MatrizToS(B),tamBuffer*numPlaces(b));
 }else{ 
   write(STDOUT_FILENO,"!",2);
 }
+ free(buffer);
  return 0;
 }

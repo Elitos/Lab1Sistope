@@ -170,19 +170,13 @@ int getFuncion(char *array[], int nargs){
             return 7;
          }
          if(array[3][0] == '*'){
+            if(array[4][0] >= 65 && array[4][0] <= 90){
+               return 9;
+            }
             int val = atoi(array[4]);
-            char *num = array[4]; 
             if(val != 0 || array[4][0] == '0' || array[4][0] == '-' ){
-             int len = strlen(array[4]);
-             if( len >= 2){
-              if((array[4][0] == '-' && atoi(num++) != 0) || (array[4][0] == '-' && array[4][1] == '0')){
+            int len = strlen(array[4]); 
                 return 8;
-              }
-             }else{
-                return 8;
-             }
-            }else{
-                return 9;
             }
          }
       }
@@ -415,7 +409,7 @@ void AResBToC(Matrix A, Matrix B, Matrix *C){
    }
 }
 
-void AmulbToB(Matrix A, int b, Matrix *B){
+void AmulbcToB(Matrix A, int b, Matrix *B){
    Matrix Aux;
    if(A.n != 0 && A.m != 0){
      Aux.matriz = inicializarMatrizMem(A.n,A.m);
@@ -473,12 +467,12 @@ int tam_matriz_string(Matrix A){
 }
 
 char *MatrizToS(Matrix A){
-    char *buffer = (char*)malloc(sizeof(char)*tam_matriz_string(A));   
+    char *buffer = (char*)malloc(sizeof(char)*tam_matriz_string(A)*10);   
     char digitos[11];
     strcpy(buffer, "");
-    snprintf(digitos, 11, "%d", A.n); 
+    sprintf(digitos, "%d", A.n); 
     strcat(buffer, digitos); strcat(buffer,"\n");
-    snprintf(digitos, 11, "%d", A.m);
+    sprintf(digitos, "%d", A.m);
     strcat(buffer, digitos); strcat(buffer,"\n");
     int i; int j;
     for(i = 0; i< A.n; i++){

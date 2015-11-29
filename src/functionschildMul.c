@@ -24,7 +24,7 @@ int main (int argc, char *argv[]) {
  AmulBToC(A,B,&C);
  
 if(C.n != 0){
-  write(STDOUT_FILENO,MatrizToS(C),tamBuffer);
+  write(STDOUT_FILENO,MatrizToS(C),tam_matriz_string(C));
 }else{ 
   write(STDOUT_FILENO,"!",2);
 }

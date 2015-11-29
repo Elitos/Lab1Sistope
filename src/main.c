@@ -250,13 +250,12 @@ void rMult(char *s[], int nargs, Matrix *arrMatrix[],int PARENT_WRITE_DES, int P
             if(s[4][0] == arrMatrix[j]->name){ //= A + 'B'    
               int tamA = tam_matriz_string(*arrMatrix[i]);
               int tamB = tam_matriz_string(*arrMatrix[j]);    
-              char *c = (char*)malloc(sizeof(char)*(tamA+tamB)*10); 
+              char *c = (char*)malloc(sizeof(char)*(tamA*tamB)); 
               char *p = (char*)malloc(sizeof(char)*(tamA+tamB)*10); 
               p = MatrizToS2(*arrMatrix[i],*arrMatrix[j]);
               write(PARENT_WRITE_DES, p , (tamB+tamA)*10); 
-              int nread = read(PARENT_READ_DES, c, (tamB+tamA)*10);
+              int nread = read(PARENT_READ_DES, c, tamB*tamA);
               free(p);
-              //printf("PADRE: \n%s\n",c);//printf("AQUI %d\n",nread);//printf("%s\n",  p);
               if(nread>4){
               for(k = 0; k<26; k++){
                   if(s[0][0] == arrMatrix[k]->name){
@@ -266,7 +265,7 @@ void rMult(char *s[], int nargs, Matrix *arrMatrix[],int PARENT_WRITE_DES, int P
               }
               }else{
                 perror("Matrices no compatibles");
-              }      
+              }    
               break;
             }
         }
